@@ -26,21 +26,19 @@ while True:
                 costo_extras = 75
             elif extras == 3:
                 costo_extras = 0
-                continue
             subtotal = precio_base + costo_extras
-            tiene_inapam = input(print("¿El cliente tiene credencial de INAPAM? (si/no): "))
+            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
             if tiene_inapam == ("si"):
                 descuento = .20
-                subtotal = subtotal - (subtotal * descuento)
             elif tiene_inapam == ("no"):
                 if (subtotal >= 300):
                     descuento = .10
-                    subtotal = subtotal - (subtotal * descuento)
-                elif (subtotal <300):
-                    continue
+                else:
+                    descuento = 0.0
+            subtotal = subtotal - (subtotal * descuento)
             # Cáluclo y suma de IVA después del subtotal y un posible descuento.
             iva = .16
-            total_cliente = subtotal - (subtotal * iva)
+            total_cliente = subtotal + (subtotal * iva)
 
         # Condicionales si el tipo de vehículo es "Sedán"
         if tipo_vehiculo == 2:
@@ -56,21 +54,19 @@ while True:
                 costo_extras = 100
             elif extras == 3:
                 costo_extras = 0
-                continue
             subtotal = precio_base + costo_extras
-            tiene_inapam = input(print("¿El cliente tiene credencial de INAPAM? (si/no): "))
+            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
             if tiene_inapam == ("si"):
                 descuento = .20
-                subtotal = subtotal - (subtotal * descuento)
             elif tiene_inapam == ("no"):
                 if (subtotal >= 300):
                     descuento = .10
-                    subtotal = subtotal - (subtotal * descuento)
-                elif (subtotal <300):
-                    continue
-                # Cáluclo y suma de IVA después del subtotal y un posible descuento.
-                iva = .16
-                total_cliente = subtotal - (subtotal * iva)
+                else:
+                    descuento = 0.0
+            subtotal = subtotal - (subtotal * descuento)
+            # Cáluclo y suma de IVA después del subtotal y un posible descuento.
+            iva = .16
+            total_cliente = subtotal + (subtotal * iva)
 
         # Condicionales si el tipo de vehículo es "SUV/Camioneta"
         if tipo_vehiculo == 3:
@@ -86,21 +82,19 @@ while True:
                 costo_extras = 100
             elif extras == 3:
                 costo_extras = 0
-                continue
             subtotal = precio_base + costo_extras
-            tiene_inapam = input(print("¿El cliente tiene credencial de INAPAM? (si/no): "))
+            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
             if tiene_inapam == ("si"):
                 descuento = .20
-                subtotal = subtotal - (subtotal * descuento)
             elif tiene_inapam == ("no"):
                 if (subtotal >= 300):
                     descuento = .10
-                    subtotal = subtotal - (subtotal * descuento)
-                elif (subtotal <300):
-                    continue
-                # Cáluclo y suma de IVA después del subtotal y un posible descuento.
-                iva = .16
-                total_cliente = subtotal - (subtotal * iva)
+                else:
+                    descuento = 0.0
+            subtotal = subtotal - (subtotal * descuento)
+            # Cálculo y suma de IVA después del subtotal y un posible descuento.
+            iva = .16
+            total_cliente = subtotal + (subtotal * iva)
 
     elif opcion == 2:
         print(f"Ventas acumuladas del dia: $")
