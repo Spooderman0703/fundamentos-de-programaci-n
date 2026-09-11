@@ -3,6 +3,7 @@ def suma_lista(valores):
     for i in valores:
         total += i
     return total
+
 def gestionar_tuplas(numeros):
     print("\n--- SUBMENÚ TUPLAS ---")
     print("1. Ver elementos.")
@@ -25,9 +26,12 @@ def gestionar_tuplas(numeros):
         print(f"Suma de la nueva tupla: {suma_lista(lista_ordenada)}")
     elif sub_opcion == 4:
         print(f"La suma total de la tupla orignial es: {suma_lista(numeros)}")
+
 def buscar_telefono(contactos, nombre):
     return contactos.get(nombre, None)
+
 def gestionar_diccionarios(contactos):
+
     print("\n--- SUBMENÚ DICCIONARIOS ---")
     print("1. Mostrar elementos de diccionario/directorio.")
     print("2. Añadir nuevo contacto (nombre y número telefónico).")
@@ -55,8 +59,33 @@ def gestionar_diccionarios(contactos):
             print(f"Número de {buscar_nombre} encontrado. Su número es: {telefono}")
         else:
             print("Contacto y número no encontrados.")
-        
 
+def calcular_operaciones():
+    try:
+        num1 = int(input("Ingresa el primer número entero: "))
+        num2 = int(input("Ingresa el segundo número entero: "))
+        suma = num1 + num2
+        print(f"La suma de {num1} y {num2} es: {suma}")
+        division = num1 / num2
+        print(f"La división de {num1} entre {num2} es: {division:}")
+
+    except ValueError:
+        print("Error: Ingresaste valores inválidos.")
+        
+    except ZeroDivisionError:
+        print("Error: No es posible una división entre 0.")
+        
+def gestionar_excepciones():
+    print("\n--- SUBMENÚ EXCEPCIONES ---")
+    print("1. Ejecutar pruebas de ingreso y división de números.")
+    print("2. Regresar al menú principal.")
+    
+    sub_opcion = input("Selecciona una opción: ")
+    
+    if sub_opcion == "1":
+        calcular_operaciones()
+    elif sub_opcion == "2":
+        print()
 
 
 def menu_principal():
@@ -74,8 +103,10 @@ def menu_principal():
         
         if opcion == 1:
             gestionar_tuplas(numeros)
-        if opcion == 2:
+        elif opcion == 2:
             gestionar_diccionarios(contactos)
+        elif opcion == 3:
+            gestionar_excepciones()
         elif opcion == 5:
             print("Programa finalizado.")
             break
