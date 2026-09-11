@@ -80,12 +80,52 @@ def gestionar_excepciones():
     print("1. Ejecutar pruebas de ingreso y división de números.")
     print("2. Regresar al menú principal.")
     
-    sub_opcion = input("Selecciona una opción: ")
+    sub_opcion = int(input("Selecciona una opción: "))
     
-    if sub_opcion == "1":
+    if sub_opcion == 1:
         calcular_operaciones()
-    elif sub_opcion == "2":
+    elif sub_opcion == 2:
         print()
+
+def contar_palabras(texto):
+    palabras = texto.split()
+    return len(palabras)
+
+def gestionar_strings():
+    mensaje = "Arriba el Real Madrid y abajo el Barça"
+
+    print("\n--- SUBMENÚ STRINGS ---")
+    print("1. Mostrar longitud del mensaje.")
+    print("2. Convertir mensaje a mayúsculas.")
+    print("3. Reemplazo de palabra.")
+    print("4. Cantidad de palabras totales.")
+    print("5. Mostrar mensaje actual.")
+
+    sub_opcion = int(input("Selecciona una opción: "))
+
+    if sub_opcion == 1:
+        print(f"Longitud del texto (caracteres): {len(mensaje)}")
+
+    elif sub_opcion == 2:
+        print(f"Mensaje en mayúsculas: {mensaje.upper()}")
+
+    elif sub_opcion == 3:
+        palabra_origen = input("Palabra que deseas buscar: ")
+        palabra_nueva = input("Palabra por la que deseas reemplazar: ")
+
+        if palabra_origen in mensaje:
+            mensaje_modificado = mensaje.replace(palabra_origen, palabra_nueva)
+            print(f"Mensaje actualizado: {mensaje_modificado}")
+        else:
+            print(f"La palabra '{palabra_origen}' no se encontró.")
+
+    elif sub_opcion == 4:
+        total_palabras = contar_palabras(mensaje)
+        print(f"El mensaje contiene {total_palabras} palabras.")
+
+    elif sub_opcion == 5:
+        print(f"Mensaje actual: \"{mensaje}\"\n")
+
 
 
 def menu_principal():
@@ -99,7 +139,7 @@ def menu_principal():
     while True:
         print("\n--- MENÚ PRINCIPAL ---")
         print("1. Tuplas\n2. Diccionarios\n3. Excepciones\n4. Strings\n5. Finalizar")
-        opcion = int(input("Selecciona una opción: "))
+        opcion = int(input("Selecciona una opción (1 - 5): "))
         
         if opcion == 1:
             gestionar_tuplas(numeros)
@@ -107,8 +147,12 @@ def menu_principal():
             gestionar_diccionarios(contactos)
         elif opcion == 3:
             gestionar_excepciones()
+        elif opcion == 4:
+            gestionar_strings()
         elif opcion == 5:
             print("Programa finalizado.")
             break
+        else:
+            print("Opción invalida, intenta de nuevo.")
 
 menu_principal()
