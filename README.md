@@ -16,3 +16,6 @@ Esta semana dirigimos nuestro enfoque hacia el aprendizaje del uso de listas, li
 
 **Semana 5.**
 Los archivos "actividad4_menu_modular.py" y "extras_semana5.ipynb" contienen tanto el ejercicio principal, como otros ejercicios extras (incluyendo ejercicios adicionales de castigo), y también contamos con el archivo "actividad4_capturas.docx" que contiene capturas de pantalla del funcionamiento correcto de nuestro ejercicio principal. Todos ellos fueron resueltos con los temas de esta semana: Tuplas, Diccionarios (claves y valores, acceso, agregar/actualizar, métodos keys/values/items, iteración), Excepciones (try/except/ValueError/ZeroDivisionError, bloques específicos, mensajes controlados) y Strings (métodos upper/lower/len/replace/split/find, slicing, f-strings, conteo de palabras).
+
+**Semana 6.**
+Esta carpeta contiene el documento de reporte "entregable_semana6.md" con capturas de pantalla que sirven de evidencia de la finalización del curso "Fundamentos de Python 1". El archivo "entregable_semana6.ipynb" contiene 25 ejercicios extras evaluables (de castigo), que integran soluciones con los 16 temas aprendidos hasta este punto del curso.
