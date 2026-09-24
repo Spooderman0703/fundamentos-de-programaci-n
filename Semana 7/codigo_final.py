@@ -1,25 +1,35 @@
+# Librerías utilizadas:
+import time
+
+# Requerimiento 2: Bienvenida dinámica.
+def bienvenida(nombre_usuario):
+    mensaje = "\nEstimado " + nombre_usuario + ", bienvenido al sistema oficial."    
+    return mensaje
+
 # Requerimiento 1: Identificación de usuario.
 def id_usuario():
+    nom_usuario = "alexxmm07"
+    contr_usuario = 700203
+
     while True:
-        nom_usuario = "alexmm07"
-        contr_usuario = 700203
         name = input("Ingresa tu nombre de usuario: ")
-        password = int(input("Ingresa tu contraseña (numérica): "))
+
+        try:
+            password = int(input("Ingresa tu contraseña (numérica): "))
+        except ValueError:
+            print("\n¡Error! : La contraseña debe contener únicamente valores numéricos.\n")
+            continue
 
         if name == nom_usuario and password == contr_usuario:
             print("\nAcceso permitido.")
+            # Requerimiento 2: Bienvenida dinámica.
+            print(bienvenida(name))
             break
         else:
             print("\nAcceso denegado. Intenta de nuevo.\n")
 
-
-# Requerimiento 2: Bienvenida dinámica.
-def bienvenida():
-    print("\nBienvenido al menú de operador de Alex QuickWash.")
-
-# Requerimiento 3: Pantalla de Carrga.
+# Requerimiento 3: Pantalla de Carga.
 def pantalla_de_carga(segundos=5):
-    import time
     duracion = min(segundos, 5) 
     
     print("\nIniciando el programa, por favor espere...")
@@ -27,114 +37,68 @@ def pantalla_de_carga(segundos=5):
         print(f"\nCargando... [{i}s restantes]", end="\r")
         time.sleep(1)
     
-    print("\n\n¡Sistema cargado con éxito! Dando paso a la pantalla principal.\n")
+    print("\n\n¡Sistema cargado con éxito! Dando paso al menú principal.\n")
+
+# Requerimiento 4: Menú como Matriz.
+def mostrar_menu_principal(matriz):
+    print("\n--- MENU PRINCIPAL ---")
+    for opcion_matriz in matriz:
+        print(f"{opcion_matriz[0]}. {opcion_matriz[1]}")
+
+    while True:
+        try:
+            opcion = int(input("Selecciona una opción: "))
+            return opcion
+        except ValueError:
+            print("Ingresaste un valor inválido. Intenta de nuevo.")
+            continue
+
+# Sub-menú para "Gestión de Operaciones"
+def menu_operaciones():
+    while True:
+        print("\n--- MENU DE OPERADOR ALEX QUICKWASH ---")
+        print("1. Registrar cliente y consumo.")
+        print("2. Reporte final del día.")
+        print("3. Regresar al Menú Principal.")
+        
+        try:
+            opcion = int(input("Selecciona una opción: "))
+        except ValueError:
+            print("\n¡Error! : Ingresa un opción válida.\n")
+            continue
+
+        if opcion == 1:
+            registrar_cliente_consumo()
+        elif opcion == 2:
+            mostrar_reporte_dia()
+        elif opcion == 3:
+            print("\nRegresando al menú principal...")
+            break
+        else:
+            print("\nOpción fuera de rango. Intenta de nuevo.\n")
+
+# Bloque fundamental para inicio de sistema.
+def ejecutar_sistema():
+    matriz_menu = [
+        [1, "Gestión de Operaciones"],
+        [2, "Gestión de Archivos"],
+        [3, "Salir"]
+    ]
+
+    while True:
+        opcion_principal = mostrar_menu_principal(matriz_menu)
+        if opcion_principal == 1:
+            menu_operaciones()
+        elif opcion_principal == 2:
+            menu_archivos()
+        elif opcion_principal == 3:
+            print("Cerrando sistema...")
+            break
+        else:
+            print("Opción inválida. Intente de nuevo.")
 
 
-
-
+# Convocación de Funciones.
 id_usuario()
-bienvenida()
 pantalla_de_carga(5)
-
-while True:
-    # Menú para operador.
-    print("--- MENU DE OPERADOR ALEX QUICKWASH ---")
-    print("1. Registrar cliente y consumo.")
-    print("2. Reporte final del día. ")
-    print("3. Salir.")
-    opcion = int(input("Selecciona una opción: "))
-
-    if opcion == 1:
-        print("--- MENU DE REGISTROS ---")
-        #nombre_cliente = input("Nombre del cliente: ")     Cambiar esta línea por acumulador para registrar número de clientes.
-        tipo_vehiculo = int(input("Tipo de vehículo (1. Motocicleta, 2. Sedán, 3. SUV/Camioneta): "))
-        # Condicionales si el tipo de vehículo es "Motocicleta"
-        if tipo_vehiculo == 1:
-            print("Las motocicletas son solamente aplicables para la limpieza básica.")
-            precio_base = 70
-            # Servicios extra de una motocicleta.
-            extras = int(input("Servicios extras (1. Encerado, 2. Lavado de motor, 3. Ninguno): "))
-            if extras == 1:
-                costo_extras = 50
-            elif extras == 2:
-                costo_extras = 75
-            elif extras == 3:
-                costo_extras = 0
-            subtotal = precio_base + costo_extras
-            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
-            if tiene_inapam == ("si"):
-                descuento = .20
-            elif tiene_inapam == ("no"):
-                if (subtotal >= 300):
-                    descuento = .10
-                else:
-                    descuento = 0.0
-            subtotal = subtotal - (subtotal * descuento)
-            # Cáluclo y suma de IVA después del subtotal y un posible descuento.
-            iva = .16
-            total_cliente = subtotal + (subtotal * iva)
-
-        # Condicionales si el tipo de vehículo es "Sedán"
-        if tipo_vehiculo == 2:
-            tipo_limpieza = int(input("Tipo de limpieza (1. Básica, 2. Profunda): "))
-            if tipo_limpieza == 1:
-                precio_base = 120
-            elif tipo_limpieza == 2:
-                precio_base = 180
-            extras = int(input("Servicios extras (1. Encerado, 2. Lavado de motor, 3. Ninguno): "))
-            if extras == 1:
-                costo_extras = 65
-            elif extras == 2:
-                costo_extras = 100
-            elif extras == 3:
-                costo_extras = 0
-            subtotal = precio_base + costo_extras
-            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
-            if tiene_inapam == ("si"):
-                descuento = .20
-            elif tiene_inapam == ("no"):
-                if (subtotal >= 300):
-                    descuento = .10
-                else:
-                    descuento = 0.0
-            subtotal = subtotal - (subtotal * descuento)
-            # Cáluclo y suma de IVA después del subtotal y un posible descuento.
-            iva = .16
-            total_cliente = subtotal + (subtotal * iva)
-
-        # Condicionales si el tipo de vehículo es "SUV/Camioneta"
-        if tipo_vehiculo == 3:
-            tipo_limpieza = int(input("Tipo de limpieza (1. Básica, 2. Profunda): "))
-            if tipo_limpieza == 1:
-                precio_base = 170
-            elif tipo_limpieza == 2:
-                precio_base = 250
-            extras = int(input("Servicios extras (1. Encerado, 2. Lavado de motor, 3. Ninguno): "))
-            if extras == 1:
-                costo_extras = 65
-            elif extras == 2:
-                costo_extras = 100
-            elif extras == 3:
-                costo_extras = 0
-            subtotal = precio_base + costo_extras
-            tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ")
-            if tiene_inapam == ("si"):
-                descuento = .20
-            elif tiene_inapam == ("no"):
-                if (subtotal >= 300):
-                    descuento = .10
-                else:
-                    descuento = 0.0
-            subtotal = subtotal - (subtotal * descuento)
-            # Cálculo y suma de IVA después del subtotal y un posible descuento.
-            iva = .16
-            total_cliente = subtotal + (subtotal * iva)
-
-    elif opcion == 2:
-        print(f"Ventas acumuladas del dia: $")
-
-    elif opcion == 3:
-        print("Cerrando el sistema del dia.")
-        break
-    else:
-        print("Opcion invalida.")
+ejecutar_sistema()
