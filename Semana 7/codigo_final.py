@@ -79,6 +79,84 @@ def mostrar_menu_principal(matriz):
             print("Ingresaste un valor inválido. Intenta de nuevo.")
             continue
 
+# Sub-función de cálculo para determinar precio base por tipo de vehículo y tipo de limpieza.
+def obtener_precio_base(tipo_vehiculo, tipo_limpieza=1):
+    if tipo_vehiculo == 1:
+        return 70
+    elif tipo_vehiculo == 2:
+        return 120 if tipo_limpieza == 1 else 180
+    elif tipo_vehiculo == 3:
+        return 170 if tipo_limpieza == 1 else 250
+    return 0
+
+# Sub-función de cálculo para determinar costo de servicios extra de acueurdo al tipo de vehículo.
+def obtener_costo_extras(tipo_vehiculo, servicio_extra):
+    if servicio_extra == 3:
+        return 0
+    if tipo_vehiculo == 1:
+        return 50 if servicio_extra == 1 else 75
+    else:
+        return 65 if servicio_extra == 1 else 100
+
+# Sub-función de cálculo para determinar precio final, IVA aplicado y un posible descuento adicional.
+def calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam):
+    subtotal = precio_base + costo_extras
+
+    if tiene_inapam.lower() == "si":
+        descuento_porcentaje = 0.20
+    elif subtotal >= 300:
+        descuento_porcentaje = 0.10
+    else:
+        descuento_porcentaje = 0.0
+
+    monto_descuento = subtotal * descuento_porcentaje
+    subtotal_con_descuento = subtotal - monto_descuento
+    monto_iva = subtotal_con_descuento * 0.16
+    total_final = subtotal_con_descuento + monto_iva
+
+    return (subtotal, monto_descuento, monto_iva, total_final)
+
+# Función orquestradora de registro de ventas.
+def registrar_cliente_consumo(fecha_actual):
+
+    print("\n--- REGISTRO DE CONSUMO DE CLIENTE ---")
+
+    try:
+        tipo_vehiculo = int(input("Tipo de vehículo (1. Motocicleta, 2. Sedán, 3. SUV/Camioneta): "))
+        if tipo_vehiculo not in [1, 2, 3]:
+            print("Opción de vehículo fuera de rango.")
+            return
+    except ValueError:
+        print("Opción inválida. Debe ingresar un número.")
+        return
+
+    tipo_limpieza = 1
+    if tipo_vehiculo in [2, 3]:
+        try:
+            tipo_limpieza = int(input("Tipo de limpieza (1. Básica, 2. Profunda): "))
+        except ValueError:
+            print("Opción inválida. Debe ingresar un número.")
+            return
+    else:
+        print("Las motocicletas aplican únicamente para limpieza básica.")
+
+    try:
+        extras = int(input("Servicios extras (1. Encerado, 2. Lavado de motor, 3. Ninguno): "))
+    except ValueError:
+        print("Opción inválida. Debe ingresar un número.")
+        return
+
+    try:
+        tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ").strip()
+    except ValueError:
+        print('Opción inválida. Debe ingresar "si"/"no".')
+        return
+    
+    precio_base = obtener_precio_base(tipo_vehiculo, tipo_limpieza)
+    costo_extras = obtener_costo_extras(tipo_vehiculo, extras)
+    
+    subtotal, descuento, iva, total = calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam)
+
 # Sub-menú para "Gestión de Operaciones"
 def menu_operaciones(fecha_actual):
     while True:
@@ -95,7 +173,7 @@ def menu_operaciones(fecha_actual):
 
         if opcion == 1:
             print(f"\n[Registrando venta para la fecha: {fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}]")
-            #registrar_cliente_consumo()
+            registrar_cliente_consumo(fecha_actual)
 
         elif opcion == 2:
             # mostrar_reporte_dia()
