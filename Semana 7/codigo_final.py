@@ -39,6 +39,32 @@ def pantalla_de_carga(segundos=5):
     
     print("\n\n¡Sistema cargado con éxito! Dando paso al menú principal.\n")
 
+# Requerimiento 6: Captura de fecha estructurada.
+def capturar_fecha():
+    print("\n--- REGISTRO DE FECHA DE OPERACIÓN ---")
+    while True:
+        try:
+            dia = int(input("Ingresa el día (1-31): "))
+            mes = int(input("Ingresa el mes (1-12): "))
+            anio = int(input("Ingresa el año: "))
+
+            if not (1 <= dia <= 31):
+                print("Día fuera de rango. Debe ser entre 1 y 31.\n")
+                continue
+            if not (1 <= mes <= 12):
+                print("Mes fuera de rango. Debe ser entre 1 y 12.\n")
+                continue
+            if anio < 2000 or anio > 2100:
+                print("Año inválido. Ingrese un año de 4 dígitos válido.\n")
+                continue
+
+            fecha = (dia, mes, anio)
+            print(f"Fecha registrada correctamente: {fecha[0]}/{fecha[1]}/{fecha[2]}\n")
+            return fecha
+
+        except ValueError:
+            print("¡Error!: Todos los datos de la fecha deben ser números enteros.\n")
+
 # Requerimiento 4: Menú como Matriz.
 def mostrar_menu_principal(matriz):
     print("\n--- MENU PRINCIPAL ---")
@@ -54,7 +80,7 @@ def mostrar_menu_principal(matriz):
             continue
 
 # Sub-menú para "Gestión de Operaciones"
-def menu_operaciones():
+def menu_operaciones(fecha_actual):
     while True:
         print("\n--- MENU DE OPERADOR ALEX QUICKWASH ---")
         print("1. Registrar cliente y consumo.")
@@ -68,9 +94,12 @@ def menu_operaciones():
             continue
 
         if opcion == 1:
-            registrar_cliente_consumo()
+            print(f"\n[Registrando venta para la fecha: {fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}]")
+            #registrar_cliente_consumo()
+
         elif opcion == 2:
-            mostrar_reporte_dia()
+            # mostrar_reporte_dia()
+            pass
         elif opcion == 3:
             print("\nRegresando al menú principal...")
             break
@@ -78,7 +107,7 @@ def menu_operaciones():
             print("\nOpción fuera de rango. Intenta de nuevo.\n")
 
 # Bloque fundamental para inicio de sistema.
-def ejecutar_sistema():
+def ejecutar_sistema(fecha_actual):
     matriz_menu = [
         [1, "Gestión de Operaciones"],
         [2, "Gestión de Archivos"],
@@ -88,7 +117,7 @@ def ejecutar_sistema():
     while True:
         opcion_principal = mostrar_menu_principal(matriz_menu)
         if opcion_principal == 1:
-            menu_operaciones()
+            menu_operaciones(fecha_actual)
         elif opcion_principal == 2:
             menu_archivos()
         elif opcion_principal == 3:
@@ -98,7 +127,8 @@ def ejecutar_sistema():
             print("Opción inválida. Intente de nuevo.")
 
 
-# Convocación de Funciones.
+# Ejecución y Convocación de funciones.
 id_usuario()
 pantalla_de_carga(5)
-ejecutar_sistema()
+fecha_sistema = capturar_fecha()
+ejecutar_sistema(fecha_sistema)
