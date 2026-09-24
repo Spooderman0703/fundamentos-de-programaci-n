@@ -1,6 +1,40 @@
-# Borrador de avance de proyecto.
-# Avance enfocado en punto #1 del menú de operador, es decir, registro de clientes y su consumo.
+# Requerimiento 1: Identificación de usuario.
+def id_usuario():
+    while True:
+        nom_usuario = "alexmm07"
+        contr_usuario = 700203
+        name = input("Ingresa tu nombre de usuario: ")
+        password = int(input("Ingresa tu contraseña (numérica): "))
 
+        if name == nom_usuario and password == contr_usuario:
+            print("\nAcceso permitido.")
+            break
+        else:
+            print("\nAcceso denegado. Intenta de nuevo.\n")
+
+
+# Requerimiento 2: Bienvenida dinámica.
+def bienvenida():
+    print("\nBienvenido al menú de operador de Alex QuickWash.")
+
+# Requerimiento 3: Pantalla de Carrga.
+def pantalla_de_carga(segundos=5):
+    import time
+    duracion = min(segundos, 5) 
+    
+    print("\nIniciando el programa, por favor espere...")
+    for i in range(duracion, 0, -1):
+        print(f"\nCargando... [{i}s restantes]", end="\r")
+        time.sleep(1)
+    
+    print("\n\n¡Sistema cargado con éxito! Dando paso a la pantalla principal.\n")
+
+
+
+
+id_usuario()
+bienvenida()
+pantalla_de_carga(5)
 
 while True:
     # Menú para operador.
