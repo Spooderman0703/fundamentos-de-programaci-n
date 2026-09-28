@@ -168,15 +168,14 @@ def ticket_individual(fecha_actual, id_venta, tipo_vehiculo, tipo_limpieza, cost
         print(f"¡Error de Permisos!: No se pudo crear el archivo {nombre_archivo}.")
 
 # Función para anexar venta individual a reporte final.
-def reporte_general(fecha_actual, id_venta, total):
-
+def reporte_general(fecha_actual, id_venta, tipo_vehiculo, subtotal, descuento, iva, total):
     string_fecha = f"{fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}"
     ruta_archivo = os.path.join(ruta_proyecto, "ventas_acumuladas.txt")
 
     # Requerimiento 8. Control de Excepciones del Sistema.
     try:
         archivo = open(ruta_archivo, "a")
-        registro = f"Fecha: {string_fecha} | Folio: #{id_venta} | Total: ${total:.2f}\n"
+        registro = f"FECHA: {string_fecha} | FOLIO: #{id_venta} | VEHICULO: {tipo_vehiculo} | SUBTOTAL: ${subtotal:.2f} | DESC: -${descuento:.2f} | IVA: +${iva:.2f} | TOTAL: ${total:.2f}\n"        
         archivo.write(registro)
         archivo.close()
             
@@ -240,8 +239,7 @@ def registrar_cliente_consumo(fecha_actual, contador_ventas):
     folio_actual = contador_ventas + 1
 
     ticket_individual(fecha_actual, folio_actual, str_vehiculo, str_limpieza, costo_extras, subtotal, descuento, iva, total)
-    reporte_general(fecha_actual, folio_actual, total)
-
+    reporte_general(fecha_actual, folio_actual, str_vehiculo, subtotal, descuento, iva, total)
     print("¡Venta registrada exitosamente!")
 
     return folio_actual
@@ -270,6 +268,143 @@ def menu_operaciones(fecha_actual):
         else:
             print("\nOpción fuera de rango. Intenta de nuevo.\n")
 
+# Sub-función para mostrar catálogo de archivos .txt existentes
+def catalogo_archivos():
+    archivos_en_carpeta = os.listdir(ruta_proyecto)
+    archivos_txt = [f for f in archivos_en_carpeta if f.endswith(".txt")]
+    
+    diccionario_archivos = {}
+    
+    print("\n--- CATALOGO DE ARCHIVOS DISPONIBLES (.txt) ---")
+    if not archivos_txt:
+        print("No se encontraron archivos de texto en el sistema.\n")
+        return diccionario_archivos
+
+    for indice, nombre_archivo in enumerate(archivos_txt, start=1):
+        diccionario_archivos[indice] = nombre_archivo
+        print(f"{indice}. {nombre_archivo}")
+
+    return diccionario_archivos
+
+# Sub-función para mostrar archivo seleccionado
+def desplegar_archivo():
+    elementos = os.listdir(ruta_proyecto)
+    archivos_txt = [f for f in elementos if f.endswith(".txt")]
+    
+    if not archivos_txt:
+        print("\n¡Error!: No existen archivos .txt disponibles para lectura en el sistema.\n")
+        return
+
+    diccionario_archivos = {i: archivo for i, archivo in enumerate(archivos_txt, start=1)}
+
+    try:
+        opcion = int(input("\nIngresa el número del archivo que deseas abrir: "))
+
+        if opcion in diccionario_archivos:
+            nombre_seleccionado = diccionario_archivos[opcion]
+            ruta_completa = os.path.join(ruta_proyecto, nombre_seleccionado)
+
+            archivo = open(ruta_completa, "r")
+            contenido = archivo.read()
+            archivo.close()
+
+            print("\n" + "="*45)
+            print(f"      DESPLIEGUE DE: {nombre_seleccionado}")
+            print("="*45)
+            print(contenido)
+            print("="*45 + "\n")
+        else:
+            print(f"\n¡Error!: El número {opcion} no corresponde a ningún archivo válido.\n")
+
+    except ValueError:
+        print("\n¡Error!: Debes ingresar únicamente un número entero.\n")
+    except FileNotFoundError:
+        print("\n¡Error!: El archivo seleccionado no existe en el disco.\n")
+    except PermissionError:
+        print("\n¡Error!: No tienes permisos para leer este archivo.\n")
+
+# Función para generar un reporte final acorde a número de tickets y datos individuales.
+def resumen_ventas():
+    
+    ruta_archivo = os.path.join(ruta_proyecto, "ventas_acumuladas.txt")
+
+    try:
+        archivo = open(ruta_archivo, "r")
+        lineas = archivo.readlines()
+        archivo.close()
+
+        if not lineas:
+            print("\n[Sistema]: La bitácora de ventas acumuladas está vacía.\n")
+            return
+
+        print("\n" + "="*70)
+        print("         ALEX QUICKWASH - REPORTE CONSOLIDADO DE VENTAS")
+        print("="*70)
+
+        total_ingresos = 0.0
+        total_descuentos = 0.0
+        total_iva = 0.0
+        conteo_tickets = len(lineas)
+
+        for linea in lineas:
+            print(linea.strip())
+            
+            try:
+                partes = linea.split("|")
+                subtotal_str = partes[3].split("$")[1]
+                desc_str = partes[4].split("$")[1]
+                iva_str = partes[5].split("$")[1]
+                total_str = partes[6].split("$")[1]
+
+                total_descuentos += float(desc_str)
+                total_iva += float(iva_str)
+                total_ingresos += float(total_str)
+            except (IndexError, ValueError):
+                continue
+
+        promedio_ticket = total_ingresos / conteo_tickets if conteo_tickets > 0 else 0.0
+
+        print("-" * 70)
+        print(f" Total de Servicios Realizados:  {conteo_tickets}")
+        print(f" Total Descuentos Otorgados:    -${total_descuentos:.2f}")
+        print(f" Total IVA Recaudado (16%):     +${total_iva:.2f}")
+        print(f" Ticket Promedio por Cliente:    ${promedio_ticket:.2f}")
+        print("-" * 70)
+        print(f" INGRESOS TOTALES ACUMULADOS:    ${total_ingresos:.2f}")
+        print("="*70 + "\n")
+
+    except FileNotFoundError:
+        print("\n¡Error!: Aún no existe el archivo 'ventas_acumuladas.txt'. Registre una venta primero.\n")
+    except PermissionError:
+        print("\n¡Error!: No tiene permisos para acceder a la bitácora general.\n")
+
+# Sub-menú para "Gestión de Archivos"
+def menu_archivos():
+    while True:
+        print("\n--- GESTION DE ARCHIVOS Y REPORTES ---")
+        print("1. Desplegar archivos .txt del catálogo.")
+        print("2. Desplegar contenido de archivo seleccionado.")
+        print("3. Generar resumen de ventas.")
+        print("4. Regresar al Menú Principal.")
+        
+        try:
+            opcion = int(input("Selecciona una opción: "))
+        except ValueError:
+            print("\n¡Error!: Ingresa un número válido.\n")
+            continue
+
+        if opcion == 1:
+            catalogo_archivos()
+        elif opcion == 2:
+            desplegar_archivo()
+        elif opcion == 3:
+            resumen_ventas()
+        elif opcion == 4:
+            print("\nRegresando al menú principal...")
+            break
+        else:
+            print("\nOpción fuera de rango. Intenta de nuevo.\n")
+
 # Bloque fundamental para inicio de sistema.
 def ejecutar_sistema(fecha_actual):
     matriz_menu = [
@@ -282,8 +417,8 @@ def ejecutar_sistema(fecha_actual):
         opcion_principal = mostrar_menu_principal(matriz_menu)
         if opcion_principal == 1:
             menu_operaciones(fecha_actual)
-        #elif opcion_principal == 2:
-            #menu_archivos()
+        elif opcion_principal == 2:
+            menu_archivos()
         elif opcion_principal == 3:
             print("Cerrando sistema...")
             break

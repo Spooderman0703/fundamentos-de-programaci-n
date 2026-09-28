@@ -1,4 +1,4 @@
-Fecha: 20/9/2026 | Folio: #1 | Total: $134.56
-Fecha: 20/9/2026 | Folio: #2 | Total: $208.80
-Fecha: 29/9/2026 | Folio: #3 | Total: $324.80
-Fecha: 29/9/2026 | Folio: #4 | Total: $214.60
+FECHA: 27/2/2026 | FOLIO: #1 | VEHICULO: Sedán | SUBTOTAL: $180.00 | DESC: -$0.00 | IVA: +$28.80 | TOTAL: $208.80
+FECHA: 27/2/2026 | FOLIO: #2 | VEHICULO: Motocicleta | SUBTOTAL: $145.00 | DESC: -$29.00 | IVA: +$18.56 | TOTAL: $134.56
+FECHA: 7/7/2026 | FOLIO: #3 | VEHICULO: SUV/Camioneta | SUBTOTAL: $250.00 | DESC: -$0.00 | IVA: +$40.00 | TOTAL: $290.00
+FECHA: 7/7/2026 | FOLIO: #4 | VEHICULO: Sedán | SUBTOTAL: $280.00 | DESC: -$56.00 | IVA: +$35.84 | TOTAL: $259.84
