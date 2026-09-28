@@ -19,3 +19,6 @@ Los archivos "actividad4_menu_modular.py" y "extras_semana5.ipynb" contienen tan
 
 **Semana 6.**
 Esta carpeta contiene el documento de reporte "capturas_certificacion.md" con capturas de pantalla que sirven de evidencia de la finalización del curso "Fundamentos de Python 1". El archivo "entregable_semana6.ipynb" contiene 25 ejercicios extras evaluables (de castigo), que integran soluciones con los 16 temas aprendidos hasta este punto del curso.
+
+**Semana 7.**
+Contiene el archivo "codigo_final.py" que busca solucionar una problemática en un autolavado mediante los 20 temas aprendidos en este bloque académico. Los archivos con nombre "ticket.txt" que cambian únicamente el número final, para que sea posible su diferenciación, son simulaciones de "tickets" por medio de archivos de texto, que generan una persistencia de datos. Y por último, el archivo "ventas_acumuladas.txt" contiene un registro total de todos los tickets, como simulación de un reporte final para el cálculo de ingresos de este negocio.
