@@ -5,6 +5,20 @@ import os
 # Ruta absoluta del directorio donde está el código principal.
 ruta_proyecto = os.path.dirname(os.path.abspath(__file__))
 
+# Requerimiento 5: Control de Inactividad del Usuario.
+def inactividad(ultimo_acceso, limite_segundos=600):
+
+    tiempo_actual = time.time()
+
+    if (tiempo_actual - ultimo_acceso) >= limite_segundos:
+        print(" ¡ALERTA DE SEGURIDAD! Inactividad detectada (10 min).")
+        
+        respuesta = input("¿Desea continuar en el sistema? (si/no): ").strip().lower()
+        if respuesta != "si":
+            return False  
+            
+    return True  
+
 # Requerimiento 2: Bienvenida dinámica.
 def bienvenida(nombre_usuario):
     mensaje = "\nEstimado " + nombre_usuario + ", bienvenido al sistema oficial."    
@@ -407,18 +421,30 @@ def menu_archivos():
 
 # Bloque fundamental para inicio de sistema.
 def ejecutar_sistema(fecha_actual):
+    
     matriz_menu = [
         [1, "Gestión de Operaciones"],
         [2, "Gestión de Archivos"],
         [3, "Salir"]
     ]
 
+    ultimo_acceso = time.time()
+
     while True:
         opcion_principal = mostrar_menu_principal(matriz_menu)
+
+        if not inactividad(ultimo_acceso):
+            print("Cerrando sistema por inactividad...")
+            break
+
+        ultimo_acceso = time.time()
+
         if opcion_principal == 1:
             menu_operaciones(fecha_actual)
+            ultimo_acceso = time.time()
         elif opcion_principal == 2:
             menu_archivos()
+            ultimo_acceso = time.time()
         elif opcion_principal == 3:
             print("Cerrando sistema...")
             break
