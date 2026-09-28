@@ -1,0 +1,15 @@
+========================================
+       ALEX QUICKWASH - TICKET          
+========================================
+Fecha de Operacion: 20/9/2026
+Folio de Venta: #1
+----------------------------------------
+Tipo de Vehiculo: Motocicleta
+Tipo de Limpieza: Básica
+Costo Servicios Extra: $75.00
+Subtotal: $145.00
+Descuento Aplicado: -$29.00
+IVA (16%): +$18.56
+----------------------------------------
+TOTAL PAGADO: $134.56
+========================================

@@ -1,0 +1,15 @@
+========================================
+       ALEX QUICKWASH - TICKET          
+========================================
+Fecha de Operacion: 20/9/2026
+Folio de Venta: #2
+----------------------------------------
+Tipo de Vehiculo: Sedán
+Tipo de Limpieza: Profunda
+Costo Servicios Extra: $0.00
+Subtotal: $180.00
+Descuento Aplicado: -$0.00
+IVA (16%): +$28.80
+----------------------------------------
+TOTAL PAGADO: $208.80
+========================================

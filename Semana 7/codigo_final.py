@@ -1,5 +1,9 @@
 # Librerías utilizadas:
 import time
+import os
+
+# Ruta absoluta del directorio donde está el código principal.
+ruta_proyecto = os.path.dirname(os.path.abspath(__file__))
 
 # Requerimiento 2: Bienvenida dinámica.
 def bienvenida(nombre_usuario):
@@ -89,7 +93,7 @@ def obtener_precio_base(tipo_vehiculo, tipo_limpieza=1):
         return 170 if tipo_limpieza == 1 else 250
     return 0
 
-# Sub-función de cálculo para determinar costo de servicios extra de acueurdo al tipo de vehículo.
+# Sub-función de cálculo para determinar costo de servicios extra de acuerdo al tipo de vehículo.
 def obtener_costo_extras(tipo_vehiculo, servicio_extra):
     if servicio_extra == 3:
         return 0
@@ -116,8 +120,71 @@ def calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam):
 
     return (subtotal, monto_descuento, monto_iva, total_final)
 
+# Función para la obtención del último folio generado por tickets.
+def ultimo_folio():
+
+    ruta_archivo = os.path.join(ruta_proyecto, "ventas_acumuladas.txt")
+
+    # Requerimiento 8. Control de Excepciones del Sistema.
+    try:
+        archivo = open(ruta_archivo, "r")
+        lineas = archivo.readlines()
+        archivo.close()
+        return len(lineas)
+    except FileNotFoundError:
+        return 0
+
+# Requerimiento 7. Persistencia en Archivos de texto.
+# Función para generación de tickets individuales mediante archivo de texto.
+def ticket_individual(fecha_actual, id_venta, tipo_vehiculo, tipo_limpieza, costo_extras, subtotal, descuento, iva, total):
+    
+    string_fecha = f"{fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}"
+    nombre_archivo = f"ticket_{id_venta}.txt"
+    ruta_completa = os.path.join(ruta_proyecto, nombre_archivo)
+
+    try:
+        archivo = open(ruta_completa, "w")
+        
+        archivo.write("========================================\n")
+        archivo.write("       ALEX QUICKWASH - TICKET          \n")
+        archivo.write("========================================\n")
+        archivo.write(f"Fecha de Operacion: {string_fecha}\n")
+        archivo.write(f"Folio de Venta: #{id_venta}\n")
+        archivo.write("----------------------------------------\n")
+        archivo.write(f"Tipo de Vehiculo: {tipo_vehiculo}\n")
+        archivo.write(f"Tipo de Limpieza: {tipo_limpieza}\n")
+        archivo.write(f"Costo Servicios Extra: ${costo_extras:.2f}\n")
+        archivo.write(f"Subtotal: ${subtotal:.2f}\n")
+        archivo.write(f"Descuento Aplicado: -${descuento:.2f}\n")
+        archivo.write(f"IVA (16%): +${iva:.2f}\n")
+        archivo.write("----------------------------------------\n")
+        archivo.write(f"TOTAL PAGADO: ${total:.2f}\n")
+        archivo.write("========================================\n")
+        
+        archivo.close()
+        print(f"[Sistema]: Ticket individual guardado exitosamente como '{nombre_archivo}'.")
+
+    except PermissionError:
+        print(f"¡Error de Permisos!: No se pudo crear el archivo {nombre_archivo}.")
+
+# Función para anexar venta individual a reporte final.
+def reporte_general(fecha_actual, id_venta, total):
+
+    string_fecha = f"{fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}"
+    ruta_archivo = os.path.join(ruta_proyecto, "ventas_acumuladas.txt")
+
+    # Requerimiento 8. Control de Excepciones del Sistema.
+    try:
+        archivo = open(ruta_archivo, "a")
+        registro = f"Fecha: {string_fecha} | Folio: #{id_venta} | Total: ${total:.2f}\n"
+        archivo.write(registro)
+        archivo.close()
+            
+    except PermissionError:
+        print("¡Error de Permisos!: No se pudo actualizar la bitácora general de ventas.")
+
 # Función orquestradora de registro de ventas.
-def registrar_cliente_consumo(fecha_actual):
+def registrar_cliente_consumo(fecha_actual, contador_ventas):
 
     print("\n--- REGISTRO DE CONSUMO DE CLIENTE ---")
 
@@ -125,26 +192,39 @@ def registrar_cliente_consumo(fecha_actual):
         tipo_vehiculo = int(input("Tipo de vehículo (1. Motocicleta, 2. Sedán, 3. SUV/Camioneta): "))
         if tipo_vehiculo not in [1, 2, 3]:
             print("Opción de vehículo fuera de rango.")
-            return
+            return contador_ventas
     except ValueError:
         print("Opción inválida. Debe ingresar un número.")
-        return
+        return contador_ventas
 
     tipo_limpieza = 1
+    str_limpieza = "Básica"
+
     if tipo_vehiculo in [2, 3]:
         try:
             tipo_limpieza = int(input("Tipo de limpieza (1. Básica, 2. Profunda): "))
+            if tipo_limpieza == 2:
+                str_limpieza = "Profunda"
+            elif tipo_limpieza != 1:
+                print("Opción de limpieza fuera de rango.")
+                return contador_ventas
         except ValueError:
-            print("Opción inválida. Debe ingresar un número.")
-            return
+            print("Entrada inválida. Debe ingresar un número.")
+            return contador_ventas
     else:
         print("Las motocicletas aplican únicamente para limpieza básica.")
 
+    nombres_vehiculo = {1: "Motocicleta", 2: "Sedán", 3: "SUV/Camioneta"}
+    str_vehiculo = nombres_vehiculo[tipo_vehiculo]
+
     try:
         extras = int(input("Servicios extras (1. Encerado, 2. Lavado de motor, 3. Ninguno): "))
+        if extras not in [1, 2, 3]:
+            print("Opción de servicio extra fuera de rango.")
+            return contador_ventas
     except ValueError:
-        print("Opción inválida. Debe ingresar un número.")
-        return
+        print("Entrada inválida. Debe ingresar un número.")
+        return contador_ventas
 
     try:
         tiene_inapam = input("¿El cliente tiene credencial de INAPAM? (si/no): ").strip()
@@ -157,13 +237,24 @@ def registrar_cliente_consumo(fecha_actual):
     
     subtotal, descuento, iva, total = calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam)
 
+    folio_actual = contador_ventas + 1
+
+    ticket_individual(fecha_actual, folio_actual, str_vehiculo, str_limpieza, costo_extras, subtotal, descuento, iva, total)
+    reporte_general(fecha_actual, folio_actual, total)
+
+    print("¡Venta registrada exitosamente!")
+
+    return folio_actual
+
 # Sub-menú para "Gestión de Operaciones"
 def menu_operaciones(fecha_actual):
+
+    contador_ventas = ultimo_folio()
+
     while True:
         print("\n--- MENU DE OPERADOR ALEX QUICKWASH ---")
         print("1. Registrar cliente y consumo.")
-        print("2. Reporte final del día.")
-        print("3. Regresar al Menú Principal.")
+        print("2. Regresar al Menú Principal.")
         
         try:
             opcion = int(input("Selecciona una opción: "))
@@ -172,13 +263,8 @@ def menu_operaciones(fecha_actual):
             continue
 
         if opcion == 1:
-            print(f"\n[Registrando venta para la fecha: {fecha_actual[0]}/{fecha_actual[1]}/{fecha_actual[2]}]")
-            registrar_cliente_consumo(fecha_actual)
-
+            contador_ventas = registrar_cliente_consumo(fecha_actual, contador_ventas)
         elif opcion == 2:
-            # mostrar_reporte_dia()
-            pass
-        elif opcion == 3:
             print("\nRegresando al menú principal...")
             break
         else:
@@ -196,8 +282,8 @@ def ejecutar_sistema(fecha_actual):
         opcion_principal = mostrar_menu_principal(matriz_menu)
         if opcion_principal == 1:
             menu_operaciones(fecha_actual)
-        elif opcion_principal == 2:
-            menu_archivos()
+        #elif opcion_principal == 2:
+            #menu_archivos()
         elif opcion_principal == 3:
             print("Cerrando sistema...")
             break
