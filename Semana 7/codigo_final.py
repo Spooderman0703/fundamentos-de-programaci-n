@@ -1,6 +1,7 @@
 # Librerías utilizadas:
 import time
 import os
+import pdb
 
 # Ruta absoluta del directorio donde está el código principal.
 ruta_proyecto = os.path.dirname(os.path.abspath(__file__))
@@ -116,6 +117,7 @@ def obtener_costo_extras(tipo_vehiculo, servicio_extra):
     else:
         return 65 if servicio_extra == 1 else 100
 
+# Requerimiento 9. Depuración técnica 
 # Sub-función de cálculo para determinar precio final, IVA aplicado y un posible descuento adicional.
 def calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam):
     subtotal = precio_base + costo_extras
@@ -126,6 +128,8 @@ def calcular_totales_transaccion(precio_base, costo_extras, tiene_inapam):
         descuento_porcentaje = 0.10
     else:
         descuento_porcentaje = 0.0
+
+    pdb.set_trace()
 
     monto_descuento = subtotal * descuento_porcentaje
     subtotal_con_descuento = subtotal - monto_descuento
@@ -421,7 +425,7 @@ def menu_archivos():
 
 # Bloque fundamental para inicio de sistema.
 def ejecutar_sistema(fecha_actual):
-    
+
     matriz_menu = [
         [1, "Gestión de Operaciones"],
         [2, "Gestión de Archivos"],
